@@ -3,3 +3,4 @@ Flask-RESTful
 flask-jwt-extended
 pymysql
 gunicorn
+flask_cors

@@ -4,8 +4,10 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from resources.user import Users,UserRegistration,UserLogin,ApplicationDetails
 from resources.admin import AddVacantRoles
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 app.config['PROPAGATE_EXCEPTIONS']=True
 app.config['PREFERRED_URL_SCHEME']='https'
 app.config['JWT_SECRET_KEY']='sportsresourceapikey'
