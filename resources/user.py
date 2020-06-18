@@ -121,18 +121,29 @@ class ApplicationDetails(Resource):
     def post(self):
         
         parser=reqparse.RequestParser()
-        parser.add_argument('Application_id',type=int,required=True,help="Application ID cannot be blank.")
+        #parser.add_argument('Application_id',type=int,required=True,help="Application ID cannot be blank.")
         parser.add_argument('EmailId',type=str,required=True,help="EmailID cannot be blank.")
         parser.add_argument('preferred_subj',type=str,required=True,help="Preferred Subject cannot be blank.")
         parser.add_argument('Roll_id',type=str,required=True,help="Job Roll ID cannot be blank.")
-        parser.add_argument('research_details',type=str)
+        parser.add_argument('Research_details',type=str,required=True,help="Job Roll ID cannot be blank.")
         #parser.add_argument('EmailId',type=str,required=True,help="EmailID cannot be blank.")
-        q=query(f"""SELECT COUNT(EmailId) FROM team12.app_details WHERE EmailId='{data['EmailId']}'""",return_json=False)
-        try:
-            x=query(f"""SELECT * FROM team12.app_details WHERE Application_id={data['Application_id']}""",return_json=False)
-            if len(x)>0: return {"message":"An application with that Application ID already exists."},400
-        except:
-            return {"message":"There was an error inserting into emp table."},500
+        data=parser.parse_args()
+        q=query(f"""SELECT COUNT(EmailId) FROM team12.app_details WHERE EmailId='{data["EmailId"]}'""",return_json=False)
+        if(q<4):
+            try:
+                x=query(f"""SELECT * FROM team12.app_details WHERE Application_id={data['Application_id']}""",return_json=False)
+                if len(x)>0: return {"message":"An application with that Application ID already exists."},400
+                try:
+                    query(f"""INSERT INTO app_details(EmailId,preferred_subj,Roll_id,Research_details)
+                            VALUES('{data["EmailId"]}','{data['preferred_subj']}','{data['Roll_id']}','{data['Research_details']}')""")
+                    return{"message":"Successfully inserted"},200
+                except:
+                    return {"message": "An error occurred while inserting into Application details."}, 500
+            except:
+                return {"message":"There was an error inserting into table."},500
+        else:
+            return {"message":"You can fill the application form only thrice."}, 101
+
 
 
 

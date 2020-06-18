@@ -2,7 +2,7 @@ from flask import Flask,jsonify
 import pymysql
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
-from resources.user import Users,UserRegistration,UserLogin
+from resources.user import Users,UserRegistration,UserLogin,ApplicationDetails
 from resources.admin import AddVacantRoles
 
 app = Flask(__name__)
@@ -30,6 +30,7 @@ api.add_resource(Users,'/user')
 api.add_resource(UserRegistration,'/userreg')
 api.add_resource(UserLogin,'/userlogin')
 api.add_resource(AddVacantRoles,'/addvacantroles')
+api.add_resource(ApplicationDetails,'/appdetails')
 
 
 if __name__=='__main__':
