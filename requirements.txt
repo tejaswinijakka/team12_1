@@ -4,3 +4,4 @@ flask-jwt-extended
 pymysql
 gunicorn
 flask_cors
+waitress

@@ -124,7 +124,7 @@ class ApplicationDetails(Resource):
         parser.add_argument('EmailId',type=str,required=True,help="EmailID cannot be blank.")
         parser.add_argument('preferred_subj',type=str,required=True,help="Preferred Subject cannot be blank.")
         parser.add_argument('Roll_id',type=str,required=True,help="Job Roll ID cannot be blank.")
-        parser.add_argument('Research_details',type=str,required=True,help="Job Roll ID cannot be blank.")
+        parser.add_argument('Research_details',type=str,required=True,help="Research Details cannot be blank.")
         #parser.add_argument('EmailId',type=str,required=True,help="EmailID cannot be blank.")
         data=parser.parse_args()
         q=query(f"""SELECT COUNT(EmailId) FROM team12.app_details WHERE EmailId='{data["EmailId"]}'""",return_json=False)
@@ -142,6 +142,30 @@ class ApplicationDetails(Resource):
             #return {"message":"There was an error inserting into table."},500
         else:
             return {"message":"You can fill the application form only thrice."}, 101
+
+class SeeVacantRoles(Resource):
+    @jwt_required
+    def get(self):
+        #parser=reqparse.RequestParser()
+        #parser.add_argument('vacant_roll_id', type=str, required=True, help='Vacant Role Id Cannot be blank')
+        #data= parser.parse_args()
+        try:
+        
+            return query(f"""Select Position_vacant as Role,Required_quali as Prerequisites,Dept_name as Department from team12.vacant_roles""")
+        except:
+            return {"message": "There was an error connecting to Vacant roles table"}, 200
+
+class SeeStatus(Resource):
+    @jwt_required
+    def get(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('Application_id', type=int, required=True, help='Application ID Cannot be blank')
+        data = parser.parse_args()
+        try:
+            return query(f"""SELECT * FROM status_table WHERE Application_id = {data['Application_id']}""")
+            
+        except:
+            return {"message": "There was an error connecting to Status table"}, 200
 
 
 
