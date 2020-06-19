@@ -73,8 +73,9 @@ class Recruited_Faculty(Resource):
         try:
             query(f"""INSERT INTO team12.recruited_faculty VALUES('{data["EmailId"]}',
                                                                  '{data['Roll_id']}')""")
-            query(f"""DELETE FROM status_table WHERE Application_id IN (SELECT Application_id FROM app_details WHERE EmailId IN ('{data["EmailId"]}'))""")
+            #query(f"""DELETE FROM status_table WHERE Application_id IN (SELECT Application_id FROM app_details WHERE EmailId IN ('{data["EmailId"]}'))""")
             query(f"""DELETE FROM app_details WHERE EmailId IN ('{data["EmailId"]}')""")
+            query(f"""DELETE FROM vacant_roles WHERE vacant_roll_id = ('{data['Roll_id']}')""")
         except:
             return{"message":"There was an error inserting into Recruited Faculty table"}, 500
         return{"message":"Successfully Inserted"}, 200

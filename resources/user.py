@@ -1,5 +1,6 @@
 from flask_restful import Resource,reqparse
 from db import query
+from flask import jsonify
 from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import create_access_token,jwt_required
 
@@ -155,17 +156,26 @@ class SeeVacantRoles(Resource):
         except:
             return {"message": "There was an error connecting to Vacant roles table"}, 200
 
-class SeeStatus(Resource):
+'''class SeeStatus(Resource):
     @jwt_required
     def get(self):
         parser=reqparse.RequestParser()
         parser.add_argument('Application_id', type=int, required=True, help='Application ID Cannot be blank')
         data = parser.parse_args()
-        try:
-            return query(f"""SELECT * FROM status_table WHERE Application_id = {data['Application_id']}""")
-            
-        except:
-            return {"message": "There was an error connecting to Status table"}, 200
+        #try:
+        q=( query(f"""SELECT  Dept_name as DEPARTMENT,Position_Vacant as POSITION FROM vacant_roles 
+                            WHERE vacant_roll_id= (SELECT Roll_id FROM app_details WHERE Application_id=
+                            (SELECT Application_id FROM status_table WHERE Application_id={data['Application_id']}))"""),
+                query(f"""SELECT id_status FROM status_table WHERE Application_id = {data['Application_id']} """))
+        return jsonify(q)'''
+        #except:
+            #return {"message":"Error"},500
+
+        #try:
+         
+        
+        #except:
+            #return {"message": "There was an error connecting to Status table"}, 500
 
 
 
