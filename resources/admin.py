@@ -13,7 +13,7 @@ class AddVacantRoles(Resource):
         parser.add_argument('percentage',type=str,required=True,help="Percentage cannot be blank.")
         data=parser.parse_args()
         try:
-            x=query(f"""SELECT * FROM team12.vacant_roles WHERE Application_id='{data['vacant_roll_id']}'""",return_json=False)
+            x=query(f"""SELECT * FROM team12.vacant_roles WHERE vacant_roll_id='{data['vacant_roll_id']}'""",return_json=False)
             if len(x)>0: return {"message":"A Vacant Role ID already exists with your given Vacant Role ID."},400
         except:
             return {"message":"There was an error inserting into vacant Roles table."},500
@@ -74,10 +74,16 @@ class Recruited_Faculty(Resource):
             query(f"""INSERT INTO team12.recruited_faculty VALUES('{data["EmailId"]}',
                                                                  '{data['Roll_id']}')""")
             #query(f"""DELETE FROM status_table WHERE Application_id IN (SELECT Application_id FROM app_details WHERE EmailId IN ('{data["EmailId"]}'))""")
+        except:
+            return{"message":"There was an error inserting into RECRUITED FACULTY the table"},500
+        try:
             query(f"""DELETE FROM app_details WHERE EmailId IN ('{data["EmailId"]}')""")
+        except:
+            return{"message":"There was an error deleting from Application Details Table"},500
+        try:
             query(f"""DELETE FROM vacant_roles WHERE vacant_roll_id = ('{data['Roll_id']}')""")
         except:
-            return{"message":"There was an error inserting into Recruited Faculty table"}, 500
+            return{"message":"There was an error deleting from Vacant Roles table"}, 500
         return{"message":"Successfully Inserted"}, 200
 
 '''class DeleteApplication(Resource):

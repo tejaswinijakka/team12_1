@@ -156,7 +156,7 @@ class SeeVacantRoles(Resource):
         except:
             return {"message": "There was an error connecting to Vacant roles table"}, 200
 
-'''class SeeStatus(Resource):
+class SeeStatus(Resource):
     @jwt_required
     def get(self):
         parser=reqparse.RequestParser()
@@ -165,9 +165,9 @@ class SeeVacantRoles(Resource):
         #try:
         q=( query(f"""SELECT  Dept_name as DEPARTMENT,Position_Vacant as POSITION FROM vacant_roles 
                             WHERE vacant_roll_id= (SELECT Roll_id FROM app_details WHERE Application_id=
-                            (SELECT Application_id FROM status_table WHERE Application_id={data['Application_id']}))"""),
-                query(f"""SELECT id_status FROM status_table WHERE Application_id = {data['Application_id']} """))
-        return jsonify(q)'''
+                            (SELECT Application_id FROM status_table WHERE Application_id={data['Application_id']}))""",return_json=False),
+                query(f"""SELECT id_status FROM status_table WHERE Application_id = {data['Application_id']} """,return_json=False))
+        return jsonify(q)
         #except:
             #return {"message":"Error"},500
 
