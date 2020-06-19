@@ -2,7 +2,7 @@ from flask import Flask,jsonify
 import pymysql
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
-from resources.user import Users,UserRegistration,UserLogin,ApplicationDetails,SeeVacantRoles,SeeStatus
+from resources.user import Users,UserRegistration,UserLogin,ApplicationDetails,SeeVacantRoles,SeeStatus,CheckRecruitedFaculty
 from resources.admin import AddVacantRoles,WriteStatus,SeeApplication,Recruited_Faculty
 from flask_cors import CORS
 
@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)
 app.config['PROPAGATE_EXCEPTIONS']=True
 app.config['PREFERRED_URL_SCHEME']='https'
-app.config['JWT_SECRET_KEY']='sportsresourceapikey'
+app.config['JWT_SECRET_KEY']='facultyrecritmentapikey'
 api = Api(app)
 jwt = JWTManager(app)
 
@@ -38,6 +38,7 @@ api.add_resource(WriteStatus,'/writestatus')
 api.add_resource(SeeApplication,'/seedetails')
 api.add_resource(Recruited_Faculty,'/recruited')
 api.add_resource(SeeStatus,'/seestatus')
+api.add_resource(CheckRecruitedFaculty,'/checkfaculty')
 
 
 if __name__=='__main__':

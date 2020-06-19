@@ -152,7 +152,7 @@ class SeeVacantRoles(Resource):
         #data= parser.parse_args()
         try:
         
-            return query(f"""Select Position_vacant as Role,Required_quali as Prerequisites,Dept_name as Department from team12.vacant_roles""")
+            return query(f"""Select vacant_roll_id as Role ID Position_vacant as Role,Required_quali as Prerequisites,Dept_name as Department from team12.vacant_roles""")
         except:
             return {"message": "There was an error connecting to Vacant roles table"}, 200
 
@@ -162,20 +162,29 @@ class SeeStatus(Resource):
         parser=reqparse.RequestParser()
         parser.add_argument('Application_id', type=int, required=True, help='Application ID Cannot be blank')
         data = parser.parse_args()
-        #try:
-        q=( query(f"""SELECT  Dept_name as DEPARTMENT,Position_Vacant as POSITION FROM vacant_roles 
+        try:
+            q=( query(f"""SELECT  Dept_name as DEPARTMENT,Position_Vacant as POSITION FROM vacant_roles 
                             WHERE vacant_roll_id= (SELECT Roll_id FROM app_details WHERE Application_id=
                             (SELECT Application_id FROM status_table WHERE Application_id={data['Application_id']}))""",return_json=False),
                 query(f"""SELECT id_status FROM status_table WHERE Application_id = {data['Application_id']} """,return_json=False))
-        return jsonify(q)
+            return jsonify(q)
         #except:
             #return {"message":"Error"},500
 
         #try:
          
         
-        #except:
-            #return {"message": "There was an error connecting to Status table"}, 500
+        except:
+            return {"message": "There was an error connecting to Status table"}, 500
+
+class CheckRecruitedFaculty(Resource):
+    @jwt_required
+    def get(self):
+        try:
+            return query(f"""SELECT First_Name,Last_Name,EmailId FROM  registration
+                            WHERE EmailId IN (SELECT EmailId FROM recruited_faculty)""")
+        except:
+            return{"message":"There was an error connecting to Recruited Faculty Table"}
 
 
 
