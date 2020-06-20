@@ -69,13 +69,13 @@ class Recruited_Faculty(Resource):
             if len(x)>0: return {"message":"Faculty with that EmailId already exists"}, 400
             
         except:
-            return{"message":"There was an error inserting into Recruited Faculty table"}, 500
+            return{"message":"There was an connecting to Recruited Faculty table"}, 500
         try:
             query(f"""INSERT INTO team12.recruited_faculty VALUES('{data["EmailId"]}',
                                                                  '{data['Roll_id']}')""")
             #query(f"""DELETE FROM status_table WHERE Application_id IN (SELECT Application_id FROM app_details WHERE EmailId = ('{data["EmailId"]}'))""")
         except:
-            return{"message":"There was an error inserting into RECRUITED FACULTY the table"},500
+            return{"message":"There was an error inserting into RECRUITED FACULTY table"},500
         try:
             query(f"""DELETE FROM app_details WHERE EmailId = ('{data["EmailId"]}')""")
         except:
@@ -98,3 +98,12 @@ class ViewVacancies(Resource):
             return query(f"""SELECT Dept_name as 'DEPARTMENT',Position_vacant as 'POSITION',Required_quali as 'REQUIRED QUALIFICATION',percentage as 'CGPA' FROM vacant_roles""")
         except:
             return{"message":"There was an error connecting to Vacant Roles Tables"}, 500
+
+class CheckRecruitedFaculty(Resource):
+    def get(self):
+        
+        try:
+            return query(f"""SELECT First_Name,Last_Name,EmailId FROM  registration
+                            WHERE EmailId IN (SELECT EmailId FROM recruited_faculty)""")
+        except:
+            return{"message":"There was an error connecting to Recruited Faculty Table"}

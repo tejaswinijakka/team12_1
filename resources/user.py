@@ -198,15 +198,7 @@ class SeeStatus(Resource):
 
 
 
-class CheckRecruitedFaculty(Resource):
-    @jwt_required
-    def get(self):
-        
-        try:
-            return query(f"""SELECT First_Name,Last_Name,EmailId FROM  registration
-                            WHERE EmailId IN (SELECT EmailId FROM recruited_faculty)""")
-        except:
-            return{"message":"There was an error connecting to Recruited Faculty Table"}
+
 
 
 

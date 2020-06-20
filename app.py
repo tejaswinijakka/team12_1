@@ -2,8 +2,8 @@ from flask import Flask,jsonify
 import pymysql
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
-from resources.user import Users,UserRegistration,UserLogin,ApplicationDetails,SeeVacantRoles,SeeStatus,CheckRecruitedFaculty,SeeMyAppDetails
-from resources.admin import AddVacantRoles,WriteStatus,SeeApplication,Recruited_Faculty,ViewVacancies
+from resources.user import Users,UserRegistration,UserLogin,ApplicationDetails,SeeVacantRoles,SeeStatus,SeeMyAppDetails
+from resources.admin import AddVacantRoles,WriteStatus,SeeApplication,Recruited_Faculty,ViewVacancies,CheckRecruitedFaculty
 from flask_cors import CORS
 
 app = Flask(__name__)
