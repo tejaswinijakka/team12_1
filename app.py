@@ -2,7 +2,7 @@ from flask import Flask,jsonify
 import pymysql
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
-from resources.user import Users,UserRegistration,UserLogin,ApplicationDetails,SeeVacantRoles,SeeStatus,CheckRecruitedFaculty
+from resources.user import Users,UserRegistration,UserLogin,ApplicationDetails,SeeVacantRoles,SeeStatus,CheckRecruitedFaculty,SeeMyAppDetails
 from resources.admin import AddVacantRoles,WriteStatus,SeeApplication,Recruited_Faculty
 from flask_cors import CORS
 
@@ -39,6 +39,7 @@ api.add_resource(SeeApplication,'/seedetails')
 api.add_resource(Recruited_Faculty,'/recruited')
 api.add_resource(SeeStatus,'/seestatus')
 api.add_resource(CheckRecruitedFaculty,'/checkfaculty')
+api.add_resource(SeeMyAppDetails,'/mydetails')
 
 
 if __name__=='__main__':

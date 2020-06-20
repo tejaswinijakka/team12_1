@@ -129,7 +129,8 @@ class ApplicationDetails(Resource):
         #parser.add_argument('EmailId',type=str,required=True,help="EmailID cannot be blank.")
         data=parser.parse_args()
         q=query(f"""SELECT COUNT(EmailId) FROM team12.app_details WHERE EmailId='{data["EmailId"]}'""",return_json=False)
-        if(q[0]['COUNT(EmailId)']<4):
+        print(q)
+        if(q[0]['COUNT(EmailId)']<3):
             #try:
             #x=query(f"""SELECT * FROM team12.app_details WHERE Application_id={data['Application_id']}""",return_json=False)
             #if len(x)>0: return {"message":"An application with that Application ID already exists."},400
@@ -142,7 +143,7 @@ class ApplicationDetails(Resource):
             #except:
             #return {"message":"There was an error inserting into table."},500
         else:
-            return {"message":"You can fill the application form only thrice."}, 101
+            return {"message":"You can fill the application form only thrice."}, 400
 
 class SeeVacantRoles(Resource):
     @jwt_required
@@ -152,21 +153,36 @@ class SeeVacantRoles(Resource):
         #data= parser.parse_args()
         try:
         
-            return query(f"""Select vacant_roll_id as Role ID Position_vacant as Role,Required_quali as Prerequisites,Dept_name as Department from team12.vacant_roles""")
+            return query(f"""Select vacant_roll_id as 'Role ID' ,Position_vacant as 'Role',Required_quali as 'Prerequisites',Dept_name as 'Department' from team12.vacant_roles""")
         except:
             return {"message": "There was an error connecting to Vacant roles table"}, 200
+
+class SeeMyAppDetails(Resource):
+    @jwt_required
+    def get(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('EmailId', type=str, required=True, help='EmailId Cannot be blank')
+        data= parser.parse_args()
+        try:
+            #q=query(f"""SELECT COUNT(EmailId) FROM team12.app_details WHERE EmailId='{data["EmailId"]}'""",return_json=False)
+            #if(q[0]['COUNT(EmailId)']>1):
+                #return query(f"""SELECT * FROM app_details WHERE EmailId IN '{data["EmailId"]}'""")
+            #else:
+            return query(f"""SELECT Application_id as 'Application ID',Roll_id as 'Role ID'  FROM app_details WHERE EmailId = '{data["EmailId"]}'""")
+        except:
+            return{"message":"Could not connect to Application Details Table"},500
 
 class SeeStatus(Resource):
     @jwt_required
     def get(self):
         parser=reqparse.RequestParser()
-        parser.add_argument('Application_id', type=int, required=True, help='Application ID Cannot be blank')
+        parser.add_argument('Application_id', type=int, required=True, help='Application_id Cannot be blank')
         data = parser.parse_args()
         try:
-            q=( query(f"""SELECT  Dept_name as DEPARTMENT,Position_Vacant as POSITION FROM vacant_roles 
+            q=( query(f"""SELECT vacant_roll_id as 'Role ID', Dept_name as 'DEPARTMENT',Position_Vacant as 'POSITION' FROM vacant_roles 
                             WHERE vacant_roll_id= (SELECT Roll_id FROM app_details WHERE Application_id=
-                            (SELECT Application_id FROM status_table WHERE Application_id={data['Application_id']}))""",return_json=False),
-                query(f"""SELECT id_status FROM status_table WHERE Application_id = {data['Application_id']} """,return_json=False))
+                            (SELECT Application_id FROM status_table WHERE Application_id= {data['Application_id']}))""",return_json=False),
+                query(f"""SELECT id_status as 'STATUS' FROM status_table WHERE Application_id = {data['Application_id']} """,return_json=False))
             return jsonify(q)
         #except:
             #return {"message":"Error"},500
@@ -177,9 +193,14 @@ class SeeStatus(Resource):
         except:
             return {"message": "There was an error connecting to Status table"}, 500
 
+
+
+
+
 class CheckRecruitedFaculty(Resource):
     @jwt_required
     def get(self):
+        
         try:
             return query(f"""SELECT First_Name,Last_Name,EmailId FROM  registration
                             WHERE EmailId IN (SELECT EmailId FROM recruited_faculty)""")
