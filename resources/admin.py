@@ -92,3 +92,9 @@ class Recruited_Faculty(Resource):
         parser.add_argument('EmailId',type=str,required=True,help="EmailId can not be blank.")
         data=parser.parse_args()
         try:'''
+class ViewVacancies(Resource):
+    def get(self):
+        try:
+            return query(f"""SELECT Dept_name as 'DEPARTMENT',Position_vacant as 'POSITION',Required_quali as 'REQUIRED QUALIFICATION',percentage as 'CGPA' FROM vacant_roles""")
+        except:
+            return{"message":"There was an error connecting to Vacant Roles Tables"}, 500

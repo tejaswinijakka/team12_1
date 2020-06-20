@@ -3,7 +3,7 @@ import pymysql
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from resources.user import Users,UserRegistration,UserLogin,ApplicationDetails,SeeVacantRoles,SeeStatus,CheckRecruitedFaculty,SeeMyAppDetails
-from resources.admin import AddVacantRoles,WriteStatus,SeeApplication,Recruited_Faculty
+from resources.admin import AddVacantRoles,WriteStatus,SeeApplication,Recruited_Faculty,ViewVacancies
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -40,7 +40,7 @@ api.add_resource(Recruited_Faculty,'/recruited')
 api.add_resource(SeeStatus,'/seestatus')
 api.add_resource(CheckRecruitedFaculty,'/checkfaculty')
 api.add_resource(SeeMyAppDetails,'/mydetails')
-
+api.add_resource(ViewVacancies,'/seevacanciesadmin')
 
 if __name__=='__main__':
     app.run(port="5000",debug=True)
