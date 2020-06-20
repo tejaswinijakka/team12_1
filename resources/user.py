@@ -179,11 +179,12 @@ class SeeStatus(Resource):
         parser.add_argument('Application_id', type=int, required=True, help='Application_id Cannot be blank')
         data = parser.parse_args()
         try:
-            q=( query(f"""SELECT vacant_roll_id as 'Role ID', Dept_name as 'DEPARTMENT',Position_Vacant as 'POSITION' FROM vacant_roles 
+            '''q=( query(f"""SELECT vacant_roll_id as 'Role ID', Dept_name as 'DEPARTMENT',Position_Vacant as 'POSITION' FROM vacant_roles 
                             WHERE vacant_roll_id= (SELECT Roll_id FROM app_details WHERE Application_id=
                             (SELECT Application_id FROM status_table WHERE Application_id= {data['Application_id']}))""",return_json=False),
                 query(f"""SELECT id_status as 'STATUS' FROM status_table WHERE Application_id = {data['Application_id']} """,return_json=False))
-            return jsonify(q)
+            return jsonify(q)'''
+            return query(f"""SELECT id_status as 'STATUS' FROM status_table WHERE Application_id = {data['Application_id']} """)
         #except:
             #return {"message":"Error"},500
 
