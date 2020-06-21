@@ -3,6 +3,7 @@ from db import query
 from flask import jsonify
 from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import create_access_token,jwt_required
+#from admin import DeclinedMembers
 
 class User():
     def __init__(self,EmailId,Passw):
@@ -128,6 +129,24 @@ class ApplicationDetails(Resource):
         parser.add_argument('Research_details',type=str,required=True,help="Research Details cannot be blank.")
         #parser.add_argument('EmailId',type=str,required=True,help="EmailID cannot be blank.")
         data=parser.parse_args()
+        #try:
+            #t=query(f"""SELECT EmailId from team12.app_details WHERE EmailId =
+                    #(SELECT EmailId from team12.declined)and Roll_id=
+                    #(SELECT Roll_id from team12.declined)""",return_json=False)
+        s=query(f"""SELECT COUNT(EmailId) FROM team12.app_details WHERE EmailId='{data["EmailId"]}'""",return_json=False)
+        print(s)
+        if(s[0]['COUNT(EmailId)']>=1):
+            t=query(f"""SELECT id_Status FROM status_table WHERE Application_id=
+                    (SELECT Application_id FROM app_details WHERE EmailId = '{data["EmailId"]}'
+                                                                and Roll_id ='{data["Roll_id"]}')""",return_json=False)
+            print(t)
+            if(len(t)>0):
+                if(t[0]['id_Status']=='DECLINED' or t[0]['id_Status']=='Declined' or t[0]['id_Status']=='declined'):
+                    return{"message":"YOU HAVE BEEN DECLINED FOR THE CORRESPONDING ROLE ID. YOU CANNOT APPLY FOR THAT ROLE AGAIN"}
+            #print(t)
+            #if(t[0]['EmailId']=='EmailId'):return{"message":"YOU HAVE BEEN DECLINED FOR THE CORRESPONDING ROLE ID. YOU CANNOT APPLY FOR THAT ROLE AGAIN"}
+        #except:
+            #return{"message":"There was an error connecting to the Tables."}
         q=query(f"""SELECT COUNT(EmailId) FROM team12.app_details WHERE EmailId='{data["EmailId"]}'""",return_json=False)
         print(q)
         if(q[0]['COUNT(EmailId)']<3):
@@ -176,7 +195,8 @@ class SeeStatus(Resource):
     @jwt_required
     def get(self):
         parser=reqparse.RequestParser()
-        parser.add_argument('Application_id', type=int, required=True, help='Application_id Cannot be blank')
+        parser.add_argument('EmailId', type=str, required=True, help='EmailId Cannot be blank')
+        parser.add_argument('Roll_id',type=str,required=True,help='Role ID cannot be blank')
         data = parser.parse_args()
         try:
             '''q=( query(f"""SELECT vacant_roll_id as 'Role ID', Dept_name as 'DEPARTMENT',Position_Vacant as 'POSITION' FROM vacant_roles 

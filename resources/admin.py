@@ -77,13 +77,15 @@ class Recruited_Faculty(Resource):
         except:
             return{"message":"There was an error inserting into RECRUITED FACULTY table"},500
         try:
+            query(f"""DELETE FROM vacant_roles WHERE vacant_roll_id = ('{data['Roll_id']}')""")
+            #return{"message":"Successfully Deleted from Vacant Roles Table"}, 200
+        except:
+            return{"message":"There was an error deleting from Vacant Roles table"}, 500
+        try:
             query(f"""DELETE FROM app_details WHERE EmailId = ('{data["EmailId"]}')""")
         except:
             return{"message":"There was an error deleting from Application Details Table"},500
-        #try:
-        #query(f"""DELETE FROM vacant_roles WHERE vacant_roll_id = ('{data['Roll_id']}')""")
-        #except:
-            #return{"message":"There was an error deleting from Vacant Roles table"}, 500
+        
         return{"message":"Successfully Inserted"}, 200
 
 '''class DeleteApplication(Resource):
@@ -107,3 +109,21 @@ class CheckRecruitedFaculty(Resource):
                             WHERE EmailId IN (SELECT EmailId FROM recruited_faculty)""")
         except:
             return{"message":"There was an error connecting to Recruited Faculty Table"}
+
+class DeclinedMembers(Resource):
+    def post(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('EmailId',type=str,required=True,help="EmailId can not be blank.")
+        parser.add_argument('Roll_id',type=str,required=True,help="Role ID cannot be blank.")
+        data=parser.parse_args()
+        try:
+            x=query(f"""SELECT * FROM team12.declined WHERE EmailId='{data["EmailId"]}' AND Roll_id='{data['Roll_id']}'""",return_json=False)
+            if len(x)>0: return {"message":"Faculty with that EmailId already exists"}, 400
+        except:
+            return {"message":"There was an error connecting to the Declined Table"},500
+        try:
+            query(f"""INSERT INTO team12.declined VALUES('{data["EmailId"]}',
+                                                                 '{data['Roll_id']}')""")
+        except:
+            return{"message":"There was an error inserting to the Declined Table"},500
+        return{"message":"Successfully inserted"},200
