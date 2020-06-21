@@ -199,14 +199,14 @@ class ApplicationDetails(Resource):
                     #print(t)
                     #if(t[0]['EmailId']=='EmailId'):return{"message":"YOU HAVE BEEN DECLINED FOR THE CORRESPONDING ROLE ID. YOU CANNOT APPLY FOR THAT ROLE AGAIN"}
             elif(s[0]['COUNT(EmailId)']==0):
-                    #try:
-                query(f"""INSERT INTO team12.app_details(EmailId,preferred_subj,Roll_id,Research_details)
+                try:
+                    query(f"""INSERT INTO team12.app_details(EmailId,preferred_subj,Roll_id,Research_details)
                                 VALUES('{data["EmailId"]}',
                                         '{data['preferred_subj']}',
                                         '{data['Roll_id']}',
                                         '{data['Research_details']}')""")
-                    #except:
-                        #return {"message":"There was an error inserting into the table"},500
+                except:
+                    return {"message":"There was an error inserting into the table"},500
                 return{"message":"Successfully inserted"},200
 
         except:
@@ -219,12 +219,12 @@ class ApplicationDetails(Resource):
             #if len(x)>0: return {"message":"An application with that Application ID already exists."},400
             try:
                 query(f"""INSERT INTO app_details(EmailId,preferred_subj,Roll_id,Research_details)
-                            VALUES('{data["EmailId"]}','{data['preferred_subj']}','{data['Roll_id']}','{data['Research_details']}')""")
+                                VALUES('{data["EmailId"]}','{data['preferred_subj']}','{data['Roll_id']}','{data['Research_details']}')""")
                 return{"message":"Successfully inserted"},200
             except:
                 return {"message": "An error occurred while inserting into Application details."}, 500
-            #except:
-            #return {"message":"There was an error inserting into table."},500
+                #except:
+                #return {"message":"There was an error inserting into table."},500
         else:
             return {"message":"You can fill the application form only thrice."}, 400
 
