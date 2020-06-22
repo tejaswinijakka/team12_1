@@ -1,6 +1,7 @@
 from flask_restful import Resource,reqparse
 from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import create_access_token,jwt_required
+from flask import jsonify
 from db import query
 
 class AddVacantRoles(Resource):
@@ -32,7 +33,10 @@ class AddVacantRoles(Resource):
 class SeeApplication(Resource):
     def get(Resource):
         try:
-            return query(f"""Select * from team12.app_details""")
+            q= (query(f"""Select * from team12.app_details""",return_json = False),
+                query(f"""Select Dept_Qualified as 'DEPARTMENT',Qualification as 'QUALIFICATION',CGPA
+                     FROM team12.registration""",return_json = False))
+            return jsonify(q)
         except:
             return {"message": "There was an error connecting to Application details table"}, 200
 
