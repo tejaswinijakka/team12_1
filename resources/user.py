@@ -259,7 +259,7 @@ class SeeStatus(Resource):
     @jwt_required
     def get(self):
         parser=reqparse.RequestParser()
-        parser.add_argument('Application_id', type=str, required=True, help='Application Id Cannot be blank')
+        parser.add_argument('EmailId', type=str, required=True, help='Email Id Cannot be blank')
         #parser.add_argument('Roll_id',type=str,required=True,help='Role ID cannot be blank')
         data = parser.parse_args()
         try:
@@ -267,8 +267,9 @@ class SeeStatus(Resource):
                             WHERE vacant_roll_id= (SELECT Roll_id FROM app_details WHERE Application_id=
                             (SELECT Application_id FROM status_table WHERE Application_id= {data['Application_id']}))""",return_json=False),
                 query(f"""SELECT id_status as 'STATUS' FROM status_table WHERE Application_id = {data['Application_id']} """,return_json=False))
-            return jsonify(q)'''
-            return query(f"""SELECT id_status as 'STATUS' FROM status_table WHERE Application_id = {data['Application_id']} """)
+            return jsonify(q)
+            return query(f"""SELECT id_status as 'STATUS' FROM status_table WHERE Application_id = {data['Application_id']} """)'''
+            return query(f"""SELECT * FROM app_details NATURAL JOIN status_table WHERE EmailId = '{data["EmailId"]}'""")
         #except:
             #return {"message":"Error"},500
 
