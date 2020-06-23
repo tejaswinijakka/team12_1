@@ -34,7 +34,7 @@ class SeeApplication(Resource):
     def get(Resource):
         try:
             q= (query(f"""Select * from team12.app_details""",return_json = False),
-                query(f"""Select Qualification as 'QUALIFICATION',CGPA
+                query(f"""Select Dept_Qualified ,Qualification ,CGPA,
                      FROM team12.registration""",return_json = False))
             return jsonify(q)
         except:
@@ -101,7 +101,7 @@ class Recruited_Faculty(Resource):
 class ViewVacancies(Resource):
     def get(self):
         try:
-            return query(f"""SELECT Dept_name as 'DEPARTMENT',Position_vacant as 'POSITION',Required_quali as 'REQUIRED QUALIFICATION',percentage as 'CGPA' FROM vacant_roles""")
+            return query(f"""SELECT Dept_name as 'DEPARTMENT',Position_vacant as 'POSITION',Required_quali as 'QUALIFICATION',percentage as 'CGPA' FROM vacant_roles""")
         except:
             return{"message":"There was an error connecting to Vacant Roles Tables"}, 500
 
