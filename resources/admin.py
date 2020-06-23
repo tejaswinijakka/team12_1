@@ -34,7 +34,7 @@ class SeeApplication(Resource):
     def get(Resource):
         try:
             q= (query(f"""Select * from team12.app_details""",return_json = False),
-                query(f"""Select Dept_Qualified as 'DEPARTMENT',Qualification as 'QUALIFICATION',CGPA
+                query(f"""Select Qualification as 'QUALIFICATION',CGPA
                      FROM team12.registration""",return_json = False))
             return jsonify(q)
         except:
