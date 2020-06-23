@@ -3,7 +3,9 @@ from db import query
 from flask import jsonify
 from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import create_access_token,jwt_required
-#from admin import DeclinedMembers
+#import sys
+#sys.path.append('C:\Users\Sridhar\Desktop\team12')
+#import admin
 
 class User():
     def __init__(self,EmailId,Passw):
@@ -226,7 +228,7 @@ class ApplicationDetails(Resource):
                 #except:
                 #return {"message":"There was an error inserting into table."},500
         else:
-            return {"message":"You can fill the application form only thrice."}, 400
+            return {"message":"You can fill the application form only thrice."}
 
 class SeeVacantRoles(Resource):
     @jwt_required
