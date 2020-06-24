@@ -120,7 +120,7 @@ class UserLogin(Resource):
         if user and safe_str_cmp(user.Passw,data['Passw']):
             access_token=create_access_token(identity=user.EmailId,expires_delta=False)
             return {'access_token':access_token},200
-        return {"message":"Invalid Credentials!"}
+        return {"access_token":"Invalid Credentials!"}
 
 class ApplicationDetails(Resource):
     @jwt_required
@@ -294,26 +294,9 @@ class SeeStatus(Resource):
             return{"message":"There was an error connecting to the views"}
         
 
-        #except:
-            #return {"message": "There was an error connecting to Status table"}, 500
+        
 
-class Notification(Resource):
-    @jwt_required
-    def get(self):
-        parser=reqparse.RequestParser()
-        parser.add_argument('EmailId', type=str, required=True, help='EmailId Cannot be blank')
-        data = parser.parse_args()
-        #try:
-        t=User.getUserByEmailId(data["EmailId"])
-        if t:
-            x=WriteStatus.post(Resource)
 
-            if(m=="Successfully Inserted"):
-                return{"message":"THERE IS A STATUS UPDATE."}
-            else:
-                return{"message":"TESTING"}
-        #except:
-            #return{"message":"There is an error connecting to the Write Status."}
 
 
             
