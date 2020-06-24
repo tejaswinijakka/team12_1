@@ -148,7 +148,7 @@ class ApplicationDetails(Resource):
                                                                         and Roll_id ='{data["Roll_id"]}')""",return_json=False)
                     print(t)
                     if(len(t)>0):
-                        if(t[0]['id_Status']=='DECLINED' or t[0]['id_Status']=='Declined' or t[0]['id_Status']=='declined'):
+                        if(t[0]['id_Status']=='DECLINED' or t[0]['id_Status']=='Declined' or t[0]['id_Status']=='declined'or t[0]['id_Status']=='REJECTED'or t[0]['id_Status']=='Rejected'or t[0]['id_Status']=='rejected'):
                             return{"message":"YOU HAVE BEEN DECLINED FOR THE CORRESPONDING ROLE ID. YOU CANNOT APPLY FOR THAT ROLE AGAIN"}
                         else:
                             try:
