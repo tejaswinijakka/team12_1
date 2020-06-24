@@ -33,10 +33,13 @@ class AddVacantRoles(Resource):
 class SeeApplication(Resource):
     def get(Resource):
         #try:
-        q= (query(f"""Select * from team12.app_details""",return_json = False),
-            query(f"""Select Dept_Qualified ,Qualification ,CGPA
-                     FROM team12.registration""",return_json = False))
-        return jsonify(q)
+        #q= (query(f"""Select * from team12.app_details""",return_json = False),
+            #query(f"""Select Dept_Qualified ,Qualification ,CGPA
+                     #FROM team12.registration""",return_json = False))
+        #query(f"""CREATE VIEW v3 as SELECT * from team12.app_details""")
+        #query(f"""CREATE VIEW v4 as Select EmailId Dept_Qualified ,Qualification ,CGPA""")
+
+        return query(f"""select * from team12.v4""")
         #except:
             #return {"message": "There was an error connecting to Application details table"}, 200
 
