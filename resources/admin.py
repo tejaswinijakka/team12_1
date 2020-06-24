@@ -42,6 +42,7 @@ class SeeApplication(Resource):
 
 class WriteStatus(Resource):
     def post(Resource):
+        m=None
         parser=reqparse.RequestParser()
         parser.add_argument('Application_id',type=int,required=True,help="Application Details can not be blank.")
         parser.add_argument('id_Status',type=str,required=True,help="Status name cannot be blank.")
@@ -50,17 +51,20 @@ class WriteStatus(Resource):
             x=query(f"""SELECT * FROM team12.status_table WHERE Application_id={data['Application_id']}""",return_json=False)
             if len(x)>0: 
                 query(f"""UPDATE status_table SET id_Status='{data['id_Status']}'WHERE Application_id={data['Application_id']}""")
+                #return {"message":1}
         #except:
             #return {"message":"There was an error inserting into Write Status table."},500
         #try:
             else:
                 query(f"""INSERT INTO team12.status_table VALUES({data['Application_id']},
                                                                  '{data['id_Status']}')""")
+                #return {"message":1}
             
             
         except:
             return {"message":"There was an error inserting into Write Status table."},500
-        return {"message":"Successfully Inserted."},201
+        m = "Successfully Inserted"
+        return {"message":"Successfully Inserted"},200
 
 class Recruited_Faculty(Resource):
     def post(self):

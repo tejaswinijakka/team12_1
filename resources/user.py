@@ -3,6 +3,7 @@ from db import query
 from flask import jsonify
 from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import create_access_token,jwt_required
+from resources.admin import WriteStatus
 #import sys
 #sys.path.append('C:\Users\Sridhar\Desktop\team12')
 #import admin
@@ -25,6 +26,7 @@ class Users(Resource):
         parser=reqparse.RequestParser()
         parser.add_argument('EmailId', type=str, required=True, help='EmailId Cannot be blank')
         data= parser.parse_args()
+        
         #try:
         
         return query(f"""Select * from team12.registration where EmailId='{data["EmailId"]}'""")
@@ -56,9 +58,9 @@ class UserRegistration(Resource):
         data = parser.parse_args()
         try:
             x=query(f"""SELECT * FROM team12.registration WHERE EmailId='{data['EmailId']}'""",return_json=False)
-            if len(x)>0: return {"message":"A registration with that Email already exists."},400
+            if len(x)>0: return {"message":"A registration with that Email already exists."}
         except:
-            return {"message":"There was an error inserting into emp table."},500
+            return {"message":"There was an error inserting into emp table."}
         #if(data['Previous_office']!=None and data['previous_position']!=None and data['years_of_service']!=None):
         try:
             query(f"""INSERT INTO team12.registration VALUES('{data['First_Name']}',
@@ -83,7 +85,7 @@ class UserRegistration(Resource):
             
             
         except:
-            return {"message":"There was an error inserting into emp table."},500
+            return {"message":"There was an error inserting into emp table."}
         return {"message":"Successfully Inserted."},201
         '''else:
             #try:
@@ -118,7 +120,7 @@ class UserLogin(Resource):
         if user and safe_str_cmp(user.Passw,data['Passw']):
             access_token=create_access_token(identity=user.EmailId,expires_delta=False)
             return {'access_token':access_token},200
-        return {"message":"Invalid Credentials!"}, 401
+        return {"message":"Invalid Credentials!"}
 
 class ApplicationDetails(Resource):
     @jwt_required
@@ -156,7 +158,7 @@ class ApplicationDetails(Resource):
                                         '{data['Roll_id']}',
                                         '{data['Research_details']}')""")
                             except:
-                                return {"message":"There was an error inserting into the table"},500
+                                return {"message":"There was an error inserting into the table"}
                             return{"message":"Successfully inserted"},200
                     else:
                         try:
@@ -166,7 +168,7 @@ class ApplicationDetails(Resource):
                                         '{data['Roll_id']}',
                                         '{data['Research_details']}')""")
                         except:
-                            return {"message":"There was an error inserting into the table"},500
+                            return {"message":"There was an error inserting into the table"}
                         return{"message":"Successfully inserted"},200
 
                 elif(r[0]['COUNT(Roll_id)']>1):
@@ -185,7 +187,7 @@ class ApplicationDetails(Resource):
                                         '{data['Roll_id']}',
                                         '{data['Research_details']}')""")
                             except:
-                                return {"message":"There was an error inserting into the table"},500
+                                return {"message":"There was an error inserting into the table"}
                             return{"message":"Successfully inserted"},200
                     else:
                         try:
@@ -195,7 +197,7 @@ class ApplicationDetails(Resource):
                                         '{data['Roll_id']}',
                                         '{data['Research_details']}')""")
                         except:
-                            return {"message":"There was an error inserting into the table"},500
+                            return {"message":"There was an error inserting into the table"}
                         return{"message":"Successfully inserted"},200
                         
                     #print(t)
@@ -208,7 +210,7 @@ class ApplicationDetails(Resource):
                                         '{data['Roll_id']}',
                                         '{data['Research_details']}')""")
                 except:
-                    return {"message":"There was an error inserting into the table"},500
+                    return {"message":"There was an error inserting into the table"}
                 return{"message":"Successfully inserted"},200
 
         except:
@@ -224,7 +226,7 @@ class ApplicationDetails(Resource):
                                 VALUES('{data["EmailId"]}','{data['preferred_subj']}','{data['Roll_id']}','{data['Research_details']}')""")
                 return{"message":"Successfully inserted"},200
             except:
-                return {"message": "An error occurred while inserting into Application details."}, 500
+                return {"message": "An error occurred while inserting into Application details."}
                 #except:
                 #return {"message":"There was an error inserting into table."},500
         else:
@@ -255,7 +257,7 @@ class SeeMyAppDetails(Resource):
             #else:
             return query(f"""SELECT Application_id as 'Application ID',Roll_id as 'Role ID'  FROM app_details WHERE EmailId = '{data["EmailId"]}'""")
         except:
-            return{"message":"Could not connect to Application Details Table"},500
+            return{"message":"Could not connect to Application Details Table"}
 
 class SeeStatus(Resource):
     @jwt_required
@@ -265,29 +267,56 @@ class SeeStatus(Resource):
         #parser.add_argument('Roll_id',type=str,required=True,help='Role ID cannot be blank')
         data = parser.parse_args()
         try:
+            query(f"""drop view v1""")
+            query(f"""drop view v2""")
+        except:
+            return{"message":"couldnt drop the views"}
+        try:
             '''q=( query(f"""SELECT vacant_roll_id as 'Role ID', Dept_name as 'DEPARTMENT',Position_Vacant as 'POSITION' FROM vacant_roles 
                             WHERE vacant_roll_id= (SELECT Roll_id FROM app_details WHERE Application_id=
                             (SELECT Application_id FROM status_table WHERE Application_id= {data['Application_id']}))""",return_json=False),
                 query(f"""SELECT id_status as 'STATUS' FROM status_table WHERE Application_id = {data['Application_id']} """,return_json=False))
             return jsonify(q)
-            return query(f"""SELECT id_status as 'STATUS' FROM status_table WHERE Application_id = {data['Application_id']} """)'''
-            return query(f"""SELECT * FROM app_details NATURAL JOIN status_table WHERE EmailId = '{data["EmailId"]}'""")
-        #except:
-            #return {"message":"Error"},500
-
-        #try:
-         
-        
+            return query(f"""SELECT id_status as 'STATUS' FROM status_table WHERE Application_id = {data['Application_id']} """)
+            q = query(f"""SELECT * FROM app_details NATURAL JOIN status_table WHERE EmailId = '{data["EmailId"]}'""")'''
+            query(f"""create view v1 as select Application_id,Roll_id from team12.app_details where EmailId='{data["EmailId"]}'""")
         except:
-            return {"message": "There was an error connecting to Status table"}, 500
+            return {"message":"There was an error creating view v1"}
+        #return {"message":"V1 successfully created"}
+        try:
+            query(f"""create view v2 as select Application_id,Roll_id,Dept_name,Position_vacant FROM v1 INNER JOIN vacant_roles ON  v1.Roll_id=vacant_roles.vacant_roll_id""")
+        except:
+            return {"message":"There was an error creating v2"}
+        #return{"message":"V2 successfully created"}
+        try:
+            return query(f"""SELECT v2.Application_id,Roll_id,Dept_name,Position_vacant,id_Status FROM v2 INNER JOIN status_table ON  v2.Application_id= status_table.Application_id""")
+        except:
+            return{"message":"There was an error connecting to the views"}
+        
 
-'''class Notification(Resource):
+        #except:
+            #return {"message": "There was an error connecting to Status table"}, 500
+
+class Notification(Resource):
     @jwt_required
     def get(self):
         parser=reqparse.RequestParser()
         parser.add_argument('EmailId', type=str, required=True, help='EmailId Cannot be blank')
         data = parser.parse_args()
-        try:'''
+        #try:
+        t=User.getUserByEmailId(data["EmailId"])
+        if t:
+            x=WriteStatus.post(Resource)
+
+            if(m=="Successfully Inserted"):
+                return{"message":"THERE IS A STATUS UPDATE."}
+            else:
+                return{"message":"TESTING"}
+        #except:
+            #return{"message":"There is an error connecting to the Write Status."}
+
+
+            
 
 
 
