@@ -120,7 +120,7 @@ class UserLogin(Resource):
         if user and safe_str_cmp(user.Passw,data['Passw']):
             access_token=create_access_token(identity=user.EmailId,expires_delta=False)
             return {'access_token':access_token},200
-        return {"access_token":"Invalid Credentials!"}
+        return {"message":"Invalid Credentials!"},400
 
 class ApplicationDetails(Resource):
     @jwt_required
