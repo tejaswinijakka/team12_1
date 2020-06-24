@@ -32,13 +32,13 @@ class AddVacantRoles(Resource):
 
 class SeeApplication(Resource):
     def get(Resource):
-        try:
-            q= (query(f"""Select * from team12.app_details""",return_json = False),
-                query(f"""Select Dept_Qualified ,Qualification ,CGPA,
+        #try:
+        q= (query(f"""Select * from team12.app_details""",return_json = False),
+            query(f"""Select Dept_Qualified ,Qualification ,CGPA
                      FROM team12.registration""",return_json = False))
-            return jsonify(q)
-        except:
-            return {"message": "There was an error connecting to Application details table"}, 200
+        return jsonify(q)
+        #except:
+            #return {"message": "There was an error connecting to Application details table"}, 200
 
 class WriteStatus(Resource):
     def post(Resource):
