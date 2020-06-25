@@ -85,7 +85,7 @@ class UserRegistration(Resource):
             
             
         except:
-            return {"message":"There was an error inserting into emp table."}
+            return {"message":"There was an error inserting into emp table."},400
         return {"message":"Successfully Inserted."},201
         '''else:
             #try:
