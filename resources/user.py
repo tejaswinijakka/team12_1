@@ -266,20 +266,20 @@ class SeeStatus(Resource):
         parser.add_argument('EmailId', type=str, required=True, help='Email Id Cannot be blank')
         #parser.add_argument('Roll_id',type=str,required=True,help='Role ID cannot be blank')
         data = parser.parse_args()
-        try:
+        '''try:
             
             query(f"""drop view v1""")
             query(f"""drop view v2""")
         except:
             return{"message":"couldnt drop the views"}
         try:
-            '''q=( query(f"""SELECT vacant_roll_id as 'Role ID', Dept_name as 'DEPARTMENT',Position_Vacant as 'POSITION' FROM vacant_roles 
+            q=( query(f"""SELECT vacant_roll_id as 'Role ID', Dept_name as 'DEPARTMENT',Position_Vacant as 'POSITION' FROM vacant_roles 
                             WHERE vacant_roll_id= (SELECT Roll_id FROM app_details WHERE Application_id=
                             (SELECT Application_id FROM status_table WHERE Application_id= {data['Application_id']}))""",return_json=False),
                 query(f"""SELECT id_status as 'STATUS' FROM status_table WHERE Application_id = {data['Application_id']} """,return_json=False))
             return jsonify(q)
             return query(f"""SELECT id_status as 'STATUS' FROM status_table WHERE Application_id = {data['Application_id']} """)
-            q = query(f"""SELECT * FROM app_details NATURAL JOIN status_table WHERE EmailId = '{data["EmailId"]}'""")'''
+            q = query(f"""SELECT * FROM app_details NATURAL JOIN status_table WHERE EmailId = '{data["EmailId"]}'""")
             query(f"""create view v1 as select Application_id,Roll_id from team12.app_details where EmailId='{data["EmailId"]}'""")
         except:
             return {"message":"There was an error creating view v1"}
@@ -293,7 +293,11 @@ class SeeStatus(Resource):
             return query(f"""SELECT v2.Application_id,Roll_id,Dept_name,Position_vacant,id_Status FROM v2 INNER JOIN status_table ON  v2.Application_id= status_table.Application_id""")
             #return query(f"""select EmailId from team12.app_details where EmailId='{data["EmailId"]}'""")
         except:
-            return{"message":"There was an error connecting to the views"}
+            return{"message":"There was an error connecting to the views"}'''
+        try:
+            return query(f"""select a.Application_id,Roll_id,Dept_name,Position_vacant,id_Status from app_details a  inner join status_table s on  a.Application_id=s.Application_id inner join vacant_roles v on a.Roll_id = v.vacant_roll_id where EmailId='{data["EmailId"]}'""")
+        except:
+            return{"message":"There was an error connecting to tables"}
         
 
         
