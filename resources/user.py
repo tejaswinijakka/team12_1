@@ -157,12 +157,22 @@ class ApplicationDetails(Resource):
                                         '{data['preferred_subj']}',
                                         '{data['Roll_id']}',
                                         '{data['Research_details']}')""")
+                                query(f"""INSERT INTO team12.app_details1(EmailId1,preferred_subj1,Roll_id1,Research_details1)
+                                        VALUES('{data["EmailId"]}',
+                                        '{data['preferred_subj']}',
+                                        '{data['Roll_id']}',
+                                        '{data['Research_details']}')""")
                             except:
                                 return {"message":"There was an error inserting into the table"}
                             return{"message":"Successfully inserted"},200
                     else:
                         try:
                             query(f"""INSERT INTO team12.app_details(EmailId,preferred_subj,Roll_id,Research_details)
+                                        VALUES('{data["EmailId"]}',
+                                        '{data['preferred_subj']}',
+                                        '{data['Roll_id']}',
+                                        '{data['Research_details']}')""")
+                            query(f"""INSERT INTO team12.app_details1(EmailId1,preferred_subj1,Roll_id1,Research_details1)
                                         VALUES('{data["EmailId"]}',
                                         '{data['preferred_subj']}',
                                         '{data['Roll_id']}',
@@ -186,6 +196,11 @@ class ApplicationDetails(Resource):
                                         '{data['preferred_subj']}',
                                         '{data['Roll_id']}',
                                         '{data['Research_details']}')""")
+                                query(f"""INSERT INTO team12.app_details1(EmailId1,preferred_subj1,Roll_id1,Research_details1)
+                                        VALUES('{data["EmailId"]}',
+                                        '{data['preferred_subj']}',
+                                        '{data['Roll_id']}',
+                                        '{data['Research_details']}')""")
                             except:
                                 return {"message":"There was an error inserting into the table"}
                             return{"message":"Successfully inserted"},200
@@ -193,6 +208,11 @@ class ApplicationDetails(Resource):
                         try:
                             query(f"""INSERT INTO team12.app_details(EmailId,preferred_subj,Roll_id,Research_details)
                                 VALUES('{data["EmailId"]}',
+                                        '{data['preferred_subj']}',
+                                        '{data['Roll_id']}',
+                                        '{data['Research_details']}')""")
+                            query(f"""INSERT INTO team12.app_details1(EmailId1,preferred_subj1,Roll_id1,Research_details1)
+                                        VALUES('{data["EmailId"]}',
                                         '{data['preferred_subj']}',
                                         '{data['Roll_id']}',
                                         '{data['Research_details']}')""")
@@ -206,6 +226,11 @@ class ApplicationDetails(Resource):
                 try:
                     query(f"""INSERT INTO team12.app_details(EmailId,preferred_subj,Roll_id,Research_details)
                                 VALUES('{data["EmailId"]}',
+                                        '{data['preferred_subj']}',
+                                        '{data['Roll_id']}',
+                                        '{data['Research_details']}')""")
+                    query(f"""INSERT INTO team12.app_details1(EmailId1,preferred_subj1,Roll_id1,Research_details1)
+                                        VALUES('{data["EmailId"]}',
                                         '{data['preferred_subj']}',
                                         '{data['Roll_id']}',
                                         '{data['Research_details']}')""")
@@ -224,6 +249,12 @@ class ApplicationDetails(Resource):
             try:
                 query(f"""INSERT INTO app_details(EmailId,preferred_subj,Roll_id,Research_details)
                                 VALUES('{data["EmailId"]}','{data['preferred_subj']}','{data['Roll_id']}','{data['Research_details']}')""")
+                query(f"""INSERT INTO team12.app_details1(EmailId1,preferred_subj1,Roll_id1,Research_details1)
+                                        VALUES('{data["EmailId"]}',
+                                        '{data['preferred_subj']}',
+                                        '{data['Roll_id']}',
+                                        '{data['Research_details']}')""")
+                #query(f"""INSERT INTO team12.status_table(Application_id,id_Status)""")
                 return{"message":"Successfully inserted"},200
             except:
                 return {"message": "An error occurred while inserting into Application details."}
@@ -295,7 +326,7 @@ class SeeStatus(Resource):
         except:
             return{"message":"There was an error connecting to the views"}'''
         try:
-            return query(f"""select a.Application_id,Roll_id,Dept_name,Position_vacant,id_Status from app_details a  inner join status_table s on  a.Application_id=s.Application_id inner join vacant_roles v on a.Roll_id = v.vacant_roll_id where EmailId='{data["EmailId"]}'""")
+            return query(f"""select a.Application_id1,Roll_id1,Dept_name1,Position_vacant1,id_Status from app_details1 a  inner join status_table s on  a.Application_id1=s.Application_id inner join vacant_roles1 v on a.Roll_id1 = v.vacant_roll_id1 where EmailId1='{data["EmailId"]}'""")
         except:
             return{"message":"There was an error connecting to tables"}
         
