@@ -234,6 +234,7 @@ class ApplicationDetails(Resource):
                                         '{data['preferred_subj']}',
                                         '{data['Roll_id']}',
                                         '{data['Research_details']}')""")
+                    #query(f"""INSERT INTO team12.status_table VALUES({data['Application_id']},'Recieved')""")
                 except:
                     return {"message":"There was an error inserting into the table"}
                 return{"message":"Successfully inserted"},200
@@ -326,10 +327,35 @@ class SeeStatus(Resource):
         except:
             return{"message":"There was an error connecting to the views"}'''
         try:
-            return query(f"""select a.Application_id1,Roll_id1,Dept_name1,Position_vacant1,id_Status from app_details1 a  inner join status_table s on  a.Application_id1=s.Application_id inner join vacant_roles1 v on a.Roll_id1 = v.vacant_roll_id1 where EmailId1='{data["EmailId"]}'""")
+            return query(f"""select a.Application_id1,Roll_id1,Dept_name1,Position_vacant1,id_Status,prev_status from app_details1 a  inner join status_table s on  a.Application_id1=s.Application_id inner join vacant_roles1 v on a.Roll_id1 = v.vacant_roll_id1 where EmailId1='{data["EmailId"]}'""")
+
         except:
             return{"message":"There was an error connecting to tables"}
+
+'''class Notification(Resource):
+    @jwt_required
+    def get(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('EmailId', type=str, required=True, help='EmailId Cannot be blank')
+        data = parser.parse_args()
+        #try:
+        #q1 = query(f"""SELECT id_Status from team12.status_table where Application_id in
+                      #(Select Application_id1 from app_details1 where EmailId1 = '{data["EmailId"]}')""")
+        #q2 = query(f"""SELECT i from team12.status_table1 where Application_id2 in 
+                      #(Select Application_id1 from app_details1 where EmailId1 = '{data["EmailId"]}')""")
+        #print(len(q1))
+        #if(q1[0]['id_Status']!=q2[0]['id_Status2']):
         
+        return query(f"""UPDATE status_table SET prev_status= 
+                     (SELECT id_Status from team12.status_table where Application_id=
+                      (Select Application_id1 from app_details1 where EmailId1 = '{data["EmailId"]}'))
+                      WHERE Application_id2=
+                       (Select Application_id1 from app_details1 where EmailId1 = '{data["EmailId"]}')""")
+                
+                
+            #return {"message":"NOTIFICATION"}
+        #except:
+            #return{"message":"There is an error connecting to the Write Status."}'''
 
         
 

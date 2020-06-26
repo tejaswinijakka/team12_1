@@ -65,6 +65,7 @@ class WriteStatus(Resource):
             else:
                 query(f"""INSERT INTO team12.status_table VALUES({data['Application_id']},
                                                                  '{data['id_Status']}')""")
+                query(f"""INSERT INTO team12.status_table1(Application_id2) values({data['Application_id']})""")
                 #return {"message":1}
             
             
@@ -73,23 +74,7 @@ class WriteStatus(Resource):
         #global m = "Successfully Inserted"
         return {"message":"Successfully Inserted"},200
 
-'''class Notification(Resource):
-    @jwt_required
-    def get(self):
-        parser=reqparse.RequestParser()
-        parser.add_argument('EmailId', type=str, required=True, help='EmailId Cannot be blank')
-        data = parser.parse_args()
-        #try:
-        t=User.getUserByEmailId(data["EmailId"])
-        if t:
-            x=global m
 
-            if(m=="Successfully Inserted"):
-                return{"message":"THERE IS A STATUS UPDATE."}
-            else:
-                return{"message":"TESTING"}
-        #except:
-            #return{"message":"There is an error connecting to the Write Status."}'''
 
 
 class Recruited_Faculty(Resource):
