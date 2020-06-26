@@ -357,6 +357,18 @@ class SeeStatus(Resource):
         #except:
             #return{"message":"There is an error connecting to the Write Status."}'''
 
+class UpdateStatus(Resource):
+    def post(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('Application_id', type=int, required=True, help='Application ID Cannot be blank')
+        #parser.add_argument('id_Status',type=str,required=True,help='Status cannot be blank')
+        data=parser.parse_args()
+        try:
+            query(f"""UPDATE status_table SET prev_status = id_Status where Application_id={data['Application_id']}""")
+        except:
+            return{"message":"There was an error connecting to the status table"}
+        return{"message":"Successfully updated"}
+
         
 
 
