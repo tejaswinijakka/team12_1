@@ -21,7 +21,7 @@ class User():
         return None
     
 class Users(Resource):
-    @jwt_required
+    #@jwt_required
     def get(self):
         parser=reqparse.RequestParser()
         parser.add_argument('EmailId', type=str, required=True, help='EmailId Cannot be blank')
@@ -123,7 +123,7 @@ class UserLogin(Resource):
         return {"message":"Invalid Credentials!"},400
 
 class ApplicationDetails(Resource):
-    @jwt_required
+    #@jwt_required
     def post(self):
         parser=reqparse.RequestParser()
         #parser.add_argument('Application_id',type=int,required=True,help="Application ID cannot be blank.")
@@ -265,7 +265,7 @@ class ApplicationDetails(Resource):
             return {"message":"You can fill the application form only thrice."}
 
 class SeeVacantRoles(Resource):
-    @jwt_required
+    #@jwt_required
     def get(self):
         #parser=reqparse.RequestParser()
         #parser.add_argument('vacant_roll_id', type=str, required=True, help='Vacant Role Id Cannot be blank')
@@ -277,7 +277,7 @@ class SeeVacantRoles(Resource):
             return {"message": "There was an error connecting to Vacant roles table"}, 200
 
 class SeeMyAppDetails(Resource):
-    @jwt_required
+    #@jwt_required
     def get(self):
         parser=reqparse.RequestParser()
         parser.add_argument('EmailId', type=str, required=True, help='EmailId Cannot be blank')
@@ -368,17 +368,3 @@ class UpdateStatus(Resource):
         except:
             return{"message":"There was an error connecting to the status table"}
         return{"message":"Successfully updated"}
-
-        
-
-
-
-
-            
-
-
-
-
-
-
-
