@@ -4,6 +4,7 @@ from flask_jwt_extended import create_access_token,jwt_required
 from flask import jsonify
 from db import query
 
+#POSTs all the vacanct roles of each department of a college/university into the Database
 class AddVacantRoles(Resource):
     def post(self):
         parser=reqparse.RequestParser()
@@ -63,9 +64,9 @@ class WriteStatus(Resource):
             #return {"message":"There was an error inserting into Write Status table."},500
         #try:
             else:
-                query(f"""INSERT INTO team12.status_table VALUES({data['Application_id']},
+                query(f"""INSERT INTO team12.status_table(Application_id,id_Status) VALUES({data['Application_id']},
                                                                  '{data['id_Status']}')""")
-                query(f"""INSERT INTO team12.status_table1(Application_id2) values({data['Application_id']})""")
+                #query(f"""INSERT INTO team12.status_table1(Application_id2) values({data['Application_id']})""")
                 #return {"message":1}
             
             
