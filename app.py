@@ -46,4 +46,4 @@ api.add_resource(DeclinedMembers,'/enterdeclined')
 api.add_resource(UpdateStatus,'/updatestatus')
 
 if __name__=='__main__':
-    app.run(port="5000",debug=True)
+    app.run()
